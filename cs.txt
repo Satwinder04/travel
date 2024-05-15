@@ -1,0 +1,1814 @@
+sort list Given the head of a linked list, return the list after sorting it in ascending order.  
+public class Solution {
+    private ListNode findMid(ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+
+        ListNode slow = head, fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    private ListNode merge(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                curr.next = l1;
+                l1 = l1.next;
+            } else {
+                curr.next = l2;
+                l2 = l2.next;
+            }
+            curr = curr.next;
+        }
+        curr.next = (l1 != null) ? l1 : l2;
+        return dummy.next;
+    }
+
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+        ListNode mid = findMid(head);
+        ListNode newHead = mid.next;
+        mid.next = null;
+        ListNode leftHalf = sortList(head);
+        ListNode rightHalf = sortList(newHead);
+        return merge(leftHalf, rightHalf);
+    }
+}
+
+
+----------------------------------------------------------------------
+Write a Java program to reverse a linked list. You are provided with a ListNode class representing each node of the linked list. 
+Implement the reverseList method in the ReverseLinkedList class to reverse the given linked list and print the reversed list using the print method.
+
+
+merge two linked list
+
+package dsapractice;
+
+import java.util.*;
+
+class ListNode {
+    int val;
+    ListNode next;
+
+    public ListNode() {
+    }
+
+    public ListNode(int val) {
+        this.val = val;
+    }
+
+    public ListNode(int val, ListNode next) {
+        this.val = val;
+        this.next = next;
+    }
+
+}
+
+public class ReverseLinkedList {
+
+    public static ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+
+        ListNode prev = null, curr = head;
+        while (curr != null) {
+            ListNode nextNode = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nextNode;
+        }
+        return prev;
+    }
+
+    public static void print(ListNode result) {
+        while (result != null) {
+            System.out.print(result.val + " ");
+            result = result.next;
+        }
+        System.out.println(); // Adding a new line after printing the list
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        ListNode head = null;
+        ListNode tail = null;
+
+        for (int i = 0; i < n; i++) {
+            int val = sc.nextInt();
+            ListNode newNode = new ListNode(val);
+            if (head == null) {
+                head = newNode;
+                tail = newNode;
+            } else {
+                tail.next = newNode;
+                tail = newNode;
+            }
+        }
+
+        head = reverseList(head); // Update the head with the new head of the reversed list
+        print(head);
+    }
+}
+
+-------------------------------------------------------------------------------------
+Write a Java program to sort a singly linked list in ascending order. You are provided with a ListNode class representing each node of the linked list. Implement the sortList method in the dhf class to sort the given linked list using the Merge Sort algorithm and print the sorted list using the print method.
+
+Input:
+
+The first line contains an integer n, the number of elements in the linked list.
+The next line contains n integers, representing the elements of the linked list.
+Output:
+
+Print the sorted linked list.
+
+
+package dsapractice;
+
+import java.util.*;
+
+public class dhf {
+    static class ListNode {
+        int val;
+        ListNode next;
+
+        public ListNode() {
+        }
+
+        public ListNode(int val) {
+            this.val = val;
+        }
+
+        public ListNode(int val, ListNode next) {
+            this.val = val;
+            this.next = next;
+        }
+    }
+
+    public static ListNode sortList(ListNode head) {
+        return middleSort(head);
+    }
+
+    public static ListNode middleSort(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode slow = head, fast = head, prev = null;
+        while (fast != null && fast.next != null) {
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        prev.next = null;
+        ListNode head1 = middleSort(head);
+        ListNode head2 = middleSort(slow);
+        return merge(head1, head2);
+    }
+
+    public static ListNode merge(ListNode head1, ListNode head2) {
+        ListNode ansHead = new ListNode(0);
+        ListNode ansTail = ansHead;
+        while (head1 != null && head2 != null) {
+            if (head1.val <= head2.val) {
+                ansTail.next = head1;
+                head1 = head1.next;
+            } else {
+                ansTail.next = head2;
+                head2 = head2.next;
+            }
+            ansTail = ansTail.next;
+        }
+        if (head1 != null) {
+            ansTail.next = head1;
+        }
+        if (head2 != null) {
+            ansTail.next = head2;
+        }
+        return ansHead.next;
+    }
+
+    public static void print(ListNode head) {
+        while (head != null) {
+            System.out.print(head.val + " ");
+            head = head.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the length of list: ");
+        int n = sc.nextInt();
+        LinkedList<Integer> ls = new LinkedList<>();
+        System.out.println("Enter the elements of list: ");
+        for (int i = 0; i < n; i++) {
+            ls.add(sc.nextInt());
+        }
+
+        ListNode dummy = new ListNode(-1);
+        ListNode curr = dummy;
+        for (int i = 0; i < ls.size(); i++) {
+            int num = ls.get(i);
+            curr.next = new ListNode(num);
+            curr = curr.next;
+        }
+        ListNode head = dummy.next;
+
+        ListNode sorted = sortList(head);
+        print(sorted);
+    }
+}
+
+
+---------------------------------------------------------------------------------------
+K group 
+
+package leetcode;
+import java.util.*;
+
+
+class Node {
+    int val;
+    Node next;
+    Node() {}
+    Node(int val) { this.val = val; }
+    Node(int val, Node next) { this.val = val; this.next = next; }
+}
+
+public class kgroup {
+    public int len(Node head) {
+        int sz = 0;
+        while (head != null) {
+            sz++;
+            head = head.next;
+        }
+        return sz;
+    }
+
+    public Node reverseKGroup(Node head, int k) {
+        int n = len(head);
+        int groups = n / k;
+        Node prevHead = null, currHead = head, ansNode = null;
+        for (int i = 0; i < groups; i++) {
+            Node prev = null, curr = currHead, nextNode = null;
+            for (int j = 0; j < k; j++) {
+                nextNode = curr.next;
+                curr.next = prev;
+                prev = curr;
+                curr = nextNode;
+            }
+            if (prevHead == null) {
+                ansNode = prev;
+            } else {
+                prevHead.next = prev;
+            }
+            prevHead = currHead;
+            currHead = curr;
+        }
+        prevHead.next = currHead;
+        return ansNode;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Input list size
+        System.out.println("Enter the number of elements in the linked list:");
+        int size = scanner.nextInt();
+
+        // Input list elements
+        System.out.println("Enter the elements of the linked list:");
+        Node head = null;
+        Node tail = null;
+        for (int i = 0; i < size; i++) {
+            int val = scanner.nextInt();
+            Node newNode = new Node(val);
+            if (head == null) {
+                head = newNode;
+                tail = newNode;
+            } else {
+                tail.next = newNode;
+                tail = newNode;
+            }
+        }
+        print(head);
+        
+        // Input k value
+//        System.out.println("Enter the value of k:");
+//        int k = scanner.nextInt();
+//
+//        kgroup solution = new kgroup();
+//        Node reversedList = solution.reverseKGroup(head, k);
+
+        // Output the reversed list
+//        System.out.println("Reversed list:");
+//        while (reversedList != null) {
+//            System.out.print(reversedList.val + " ");
+//            reversedList = reversedList.next;
+//        }
+//
+//        scanner.close();
+    }
+    
+    public static void print(Node head) {
+    	while(head!=null) {
+    		System.out.print(head.val+" ");
+    		head=head.next;
+    	}
+    	System.out.println();
+    }
+}
+
+
+------------------------------------------------------------------
+Remove Nth from end 
+
+
+package leetcode;
+
+//class ListNode {
+//    int val;
+//    ListNode next;
+//    ListNode() {}
+//    ListNode(int val) { this.val = val; }
+//    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+//}
+
+public class RemoveNthFromEnd {
+    public static void main(String[] args) {
+        // Create a sample linked list: 1 -> 2 -> 3 -> 4 -> 5
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(3);
+        head.next.next.next = new ListNode(4);
+        head.next.next.next.next = new ListNode(5);
+
+        // Print the original linked list
+        System.out.println("Original Linked List:");
+        printLinkedList(head);
+
+        // Call the removeNthFromEnd method
+        int n = 2; // Remove the 2nd node from the end
+        head = removeNthFromEnd(head, n);
+
+        // Print the modified linked list
+        System.out.println("\nModified Linked List after removing the " + n + "th node from the end:");
+        printLinkedList(head);
+    }
+
+    public static ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode fast = dummy, slow = dummy;
+
+        // Move fast pointer n steps ahead
+        for (int i = 0; i <= n; i++) {
+            fast = fast.next;
+        }
+
+        // Move both pointers simultaneously until fast reaches the end
+        while (fast != null) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+
+        // Remove the nth node from the end
+        slow.next = slow.next.next;
+
+        return dummy.next;
+    }
+
+    public static void printLinkedList(ListNode head) {
+        ListNode current = head;
+        while (current != null) {
+            System.out.print(current.val + " ");
+            current = current.next;
+        }
+    }
+}
+-----------------------------------------------------------------
+delete duplicate
+
+package leetcode;
+
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x) {
+        val = x;
+        next = null;
+    }
+}
+
+public class dltduplicate {
+	public ListNode deleteDuplicates(ListNode head) {
+	    ListNode current = head;
+
+	    while (current != null && current.next != null) {
+	        if (current.val == current.next.val) {
+	            // Skip all the nodes with the duplicate value
+	            current.next = current.next.next;
+	        } else {
+	            // Move current one step forward
+	            current = current.next;
+	        }
+	    }
+
+	    return head;
+	}
+
+    public static void main(String[] args) {
+        // Test your code here
+        // Create sample linked list
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(3);
+        head.next.next.next = new ListNode(3);
+        head.next.next.next.next = new ListNode(4);
+        head.next.next.next.next.next = new ListNode(4);
+        head.next.next.next.next.next.next = new ListNode(5);
+
+        // Create an instance of Solution class
+        dltduplicate solution = new dltduplicate();
+
+        // Call deleteDuplicates method and print the result
+        ListNode result = solution.deleteDuplicates(head);
+        while (result != null) {
+            System.out.print(result.val + " ");
+            result = result.next;
+        }
+    }
+}
+
+
+---------------------------------------------------------------------
+Kth node end 
+
+package leetcode;
+
+//Define the ListNode class within the Solution.java file
+//class ListNode {
+// int val;
+// ListNode next;
+// 
+// ListNode() {}
+// 
+// ListNode(int val) {
+//     this.val = val;
+// }
+// 
+// ListNode(int val, ListNode next) {
+//     this.val = val;
+//     this.next = next;
+// }
+//}
+
+//Define the Solution class with a main method
+public class kthnodeend {
+ public static void main(String[] args) {
+     // Create a sample linked list: 1 -> 2 -> 3 -> 4 -> 5 -> 6
+     ListNode head = new ListNode(1);
+     head.next = new ListNode(2);
+     head.next.next = new ListNode(3);
+     head.next.next.next = new ListNode(4);
+     head.next.next.next.next = new ListNode(5);
+     head.next.next.next.next.next = new ListNode(6);
+     
+     // Define the value of n (the position of the node to remove)
+     int n = 5;
+     
+     // Call the removeNthFromEnd method and print the result
+     ListNode result = removeNthFromEnd(head, n);
+     printList(result);
+ }
+ 
+ // Define the removeNthFromEnd method
+ public static ListNode removeNthFromEnd(ListNode head, int n) {
+     ListNode fast = head, slow = head;
+     for (int i = 0; i < n; i++) {
+         fast = fast.next;
+     }
+     
+     if (fast == null) {
+         return head.next;
+     }
+         
+     while (fast.next != null) {
+         slow = slow.next;
+         fast = fast.next;
+     }
+     
+     slow.next = slow.next.next;
+     return head;
+ }
+ 
+ // Helper method to print the linked list
+ public static void printList(ListNode head) {
+     while (head != null) {
+         System.out.print(head.val + " ");
+         head = head.next;
+     }
+     System.out.println();
+ }
+}
+---------------------------------------------------------
+abc reverse list
+
+package leetcode;
+
+import java.util.*;
+import java.io.*;
+
+public class abc {
+ public static void main(String args[]) {
+ Scanner sc = new Scanner(System.in);
+ int n = sc.nextInt();
+ ListNode head = new ListNode(-1);
+ ListNode cur = head;
+ for(int i=0;i<n;i++){
+ int val = sc.nextInt();
+ cur.next = new ListNode(val);
+ cur = cur.next;
+ }
+ ListNode ans = reverseList(head.next);
+ while(ans!=null){
+ System.out.print(ans.val+" ");
+ ans = ans.next;
+ }
+ }
+ public static class ListNode {
+ int val;
+ ListNode next;
+ ListNode() {}
+ ListNode(int val) { this.val = val; }
+ ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ }
+ 
+ public static ListNode reverseList(ListNode head) {
+ if(head==null || head.next==null) return head;
+ 
+ //5 -> 4 -> 3 -> 2 -> 1
+ ListNode ans = reverseList(head.next);
+ head.next.next=head;
+//loop avoid
+ head.next=null;
+ 
+ return ans;
+ }
+}
+
+----------------------------------------------------
+Two sum 
+
+package leetcode;
+
+import java.util.HashMap;
+
+class Solution {
+	public int[] twoSum(int[] nums, int target) {
+		HashMap<Integer, Integer> map = new HashMap<>();
+		// fill
+		for (int i = 0; i < nums.length; i++) {
+			map.put(nums[i], i);
+		}
+		// searching
+		for (int i = 0; i < nums.length; i++) {
+			int n = nums[i];
+			int rem = target - n;
+			if (map.containsKey(rem)) {
+				int index = map.get(rem);
+				if (index == i)
+					continue;
+				return new int[] { index, i };
+			}
+		}
+		return new int[] {};
+	}
+}
+
+public class Twosum {
+	public static void main(String[] args) {
+		Solution solution = new Solution();
+		int[] nums = { 2, 7, 11, 15 };
+		int target = 9;
+		int[] result = solution.twoSum(nums, target);
+		System.out.println("{" + result[0] + "," + result[1] + "}");
+	}
+}
+--------------------------------------------------
+PlusOne66
+
+
+package leetcode;
+
+import java.util.*;
+
+public class PlusOne66 {
+    public int[] plusOne(int[] digits) {
+        int n = digits.length;
+        for (int i = n - 1; i >= 0; i--) {
+            if (digits[i] != 9) {
+                digits[i]++;
+                break;
+            } else {
+                digits[i] = 0;
+            }
+        }
+        if (digits[0] == 0) {
+            int[] res = new int[n + 1];
+            res[0] = 1;
+            return res;
+        }
+        return digits;
+    }
+
+    public static void main(String[] args) {
+        PlusOne66 solution = new PlusOne66();
+        int[] digits = {1,2,3};
+        int[] result = solution.plusOne(digits);
+        System.out.println(Arrays.toString(result));
+    }
+}
+----------------------------------------------------\\
+Given an array of integers nums sorted in non-decreasing order, find the starting and ending position of a given target value.
+
+If target is not found in the array, return [-1, -1].
+
+You must write an algorithm with O(log n) runtime complexity.
+
+ 
+
+Example 1:
+
+Input: nums = [5,7,7,8,8,10], target = 8
+Output: [3,4]
+Example 2:
+
+Input: nums = [5,7,7,8,8,10], target = 6
+Output: [-1,-1]
+Example 3:
+
+Input: nums = [], target = 0
+Output: [-1,-1]
+ 
+
+Constraints:
+
+0 <= nums.length <= 105
+-109 <= nums[i] <= 109
+nums is a non-decreasing array.
+-109 <= target <= 109
+
+
+
+
+package leetcode;
+
+public class leetcode34firstandlast {
+    public int[] searchRange(int[] nums, int target) {
+    	
+        int res[] =new int[2];
+        int first = binarySearch(nums , target, true);
+        int last = binarySearch(nums, target, false);
+        res[0]=first;
+        res[1]=last;
+        return res;
+
+    }
+    static int binarySearch(int arr[], int target, boolean isFirst ){
+        int ans = -1;
+        int start = 0;
+        int end = arr.length - 1;
+        while(start<=end){
+            int mid = start + (end - start)/2;
+            if(arr[mid]==target){
+                ans = mid;
+                if(isFirst){
+                    end = mid -1;
+                }else{
+                    start = mid +1;
+                }
+            }else if (arr[mid]<target){
+                start = mid+1;
+            }
+            else{
+              end = mid -1;
+            }
+        }
+        return ans;
+
+    }
+}
+-----------------------------------------------
+MergeTwoSortedLists
+
+
+package leetcode;
+//Definition for singly-linked list
+class ListNode1 {
+ int val;
+ ListNode1 next;
+ ListNode1() {}
+ ListNode1(int val) { this.val = val; }
+ ListNode1(int val, ListNode1 next) { this.val = val; this.next = next; }
+}
+
+public class MergeTwoSortedLists {
+ public static void main(String[] args) {
+     // Example input: list1 = [1,2,4], list2 = [1,3,4]
+     ListNode1 list1 = new ListNode1(1, new ListNode1(2, new ListNode1(4)));
+     ListNode1 list2 = new ListNode1(1, new ListNode1(3, new ListNode1(4)));
+
+     MergeTwoSortedLists solution = new MergeTwoSortedLists();
+     ListNode1 mergedList = solution.mergeTwoLists(list1, list2);
+
+     // Print the merged list
+     while (mergedList != null) {
+         System.out.print(mergedList.val + " ");
+         mergedList = mergedList.next;
+     }
+ }
+
+ public ListNode1 mergeTwoLists(ListNode1 list1, ListNode1 list2) {
+     ListNode1 dummy= new ListNode1(-1);
+     ListNode1 curr= dummy;
+     while(list1 != null && list2 !=null){
+         if(list1.val<list2.val){
+             curr.next=list1;
+             list1=list1.next;
+         }else{
+             curr.next=list2;
+             list2=list2.next;
+         }
+         curr=curr.next;
+     }
+     if(list1 != null){
+         curr.next=list1;
+     }else{
+         curr.next=list2;
+     }
+     
+     return dummy.next;
+ }
+
+}
+-----------------------------------------------------
+random pointer
+
+
+import java.util.*;
+
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of nodes: ");
+        int n = scanner.nextInt();
+        
+        Node[] nodes = new Node[n];
+        
+        // Nodes banane ke liye loop
+        for (int i = 0; i < n; i++) {
+            System.out.print("Node ke liye value daalo " + (i+1) + ": ");
+            int val = scanner.nextInt();
+            nodes[i] = new Node(val);
+        }
+        
+        // Next pointers set karne ke liye loop
+        for (int i = 0; i < n - 1; i++) {
+            nodes[i].next = nodes[i + 1];
+        }
+        
+        // Random pointers set karne ke liye loop
+        for (int i = 0; i < n; i++) {
+            System.out.print("Node " + (i+1) + " ka random pointer kis node ko point karega (agar null hai toh -1 daalo): ");
+            int randomIndex = scanner.nextInt();
+            if (randomIndex != -1) {
+                nodes[i].random = nodes[randomIndex];
+            }
+        }
+        
+        // Linked list ko print karne ke liye loop
+        Node head = nodes[0];
+        while (head != null) {
+            System.out.print(head.val + " ");
+            head = head.next;
+        }
+        System.out.println();
+        
+        // Random pointers ko print karne ke liye loop
+        head = nodes[0];
+        while (head != null) {
+            if (head.random != null) {
+                System.out.print(head.random.val + " ");
+            } else {
+                System.out.print("-1 ");
+            }
+            head = head.next;
+        }
+    }
+}
+--------------------------------------------------
+Reverse Nodes in k-Group leetcode 25
+class Solution(object):
+    def reverseKGroup(self, head, k):
+        """
+        :type head: ListNode
+        :type k: int
+        :rtype: ListNode
+        """
+        def reverseLinkedList(head, k):
+            prev = None
+            curr = head
+            while k > 0 and curr:
+                next_node = curr.next
+                curr.next = prev
+                prev = curr
+                curr = next_node
+                k -= 1
+            return prev
+        
+        dummy = ListNode(0)
+        dummy.next = head
+        prev_group_end = dummy
+        while True:
+            # Check if there are at least k nodes left
+            start = prev_group_end.next
+            end = prev_group_end
+            for _ in range(k):
+                if end.next:
+                    end = end.next
+                else:
+                    return dummy.next  # No more nodes to reverse
+            
+            # Save the next group's start
+            next_group_start = end.next
+            
+            # Reverse the current group
+            end.next = None  # Disconnect the end of the current group
+            prev_group_end.next = reverseLinkedList(start, k)
+            
+            # Reconnect the reversed group
+            start.next = next_group_start
+            
+            # Update prev_group_end for the next iteration
+            prev_group_end = start
+        
+        return dummy.next
+
+-------------------------------
+19. Remove Nth Node From End of List
+
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        int l = 0;
+        ListNode x = head;
+        while(x!=null) {
+            x = x.next;
+            l++;
+        }
+        int y=l-n;
+        if(y==0) {
+            return head.next;
+        }
+        x=head;
+        for(int i=1;i<y;i++) {
+            x=x.next;
+        }
+        x.next = x.next.next;
+        return head;
+    }
+}
+----------------------------------
+Merge k Sorted Lists leetcode 23
+public class Solution {
+    public ListNode mergeKLists(List<ListNode> lists) {
+        if (lists==null||lists.size()==0) return null;
+        
+        PriorityQueue<ListNode> queue= new PriorityQueue<ListNode>(lists.size(),new Comparator<ListNode>(){
+            @Override
+            public int compare(ListNode o1,ListNode o2){
+                if (o1.val<o2.val)
+                    return -1;
+                else if (o1.val==o2.val)
+                    return 0;
+                else 
+                    return 1;
+            }
+        });
+        
+        ListNode dummy = new ListNode(0);
+        ListNode tail=dummy;
+        
+        for (ListNode node:lists)
+            if (node!=null)
+                queue.add(node);
+            
+        while (!queue.isEmpty()){
+            tail.next=queue.poll();
+            tail=tail.next;
+            
+            if (tail.next!=null)
+                queue.add(tail.next);
+        }
+        return dummy.next;
+    }
+}
+
+---------------------------
+138  Copy List with Random Pointer
+
+
+class Solution {
+    public Node copyRandomList(Node head) {
+        // Check if the original list is empty
+        if (head == null)
+            return null;
+        
+        // Initialize the copied list with the value from the original head
+        Node originalCopy = new Node(head.val);
+        Node copiedHead = originalCopy;
+        Node current = head;
+        
+        // Create a mapping between nodes in the original list and their copies
+        HashMap<Node, Node> referenceMap = new HashMap<>();
+        referenceMap.put(current, copiedHead);
+        current = current.next;
+
+        // Copy the rest of the nodes in the list
+        while (current != null) {
+            copiedHead.next = new Node(current.val);
+            referenceMap.put(current, copiedHead.next);
+            current = current.next;
+            copiedHead = copiedHead.next;
+        }
+
+        // Reset pointers for traversing both original and copied lists
+        current = head;
+        copiedHead = originalCopy;
+
+        // Populate the 'random' pointers in the copied list using the mapping
+        while (current != null) {
+            copiedHead.random = referenceMap.get(current.random);
+            current = current.next;
+            copiedHead = copiedHead.next;
+        }
+
+        // Return the head of the copied list
+        return originalCopy;
+    }
+}
+------------------------------------------
+Reverse Linked List 206
+
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null;  
+        ListNode current = head;
+    
+        
+        while(current != null) { 
+            ListNode next = current.next; 
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+       return prev; 
+    }
+}
+
+--------------------
+Power of Two 231
+
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if(n == 1)return true;
+        if(n<1) return false;
+        while(n>1){
+            if(n%2 != 0){
+                return false;
+            }
+            n = n/2;
+        }
+        return true;
+    }
+}
+------------------------------
+141. Linked List Cycle
+
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if (fast == slow) {
+                return true;
+            }
+        }
+
+        return false;        
+    }
+}
+
+__________________________________________________________________________
+ST2
+
+Q1. Two Sum
+
+Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+You can return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+Example 2:
+
+Input: nums = [3,2,4], target = 6
+Output: [1,2]
+Example 3:
+
+Input: nums = [3,3], target = 6
+Output: [0,1]
+ 
+
+Constraints:
+
+2 <= nums.length <= 10^4
+-10^9 <= nums[i] <= 10^9
+-10^9 <= target <= 10^9
+Only one valid answer exists.
+
+Solution:
+import java.util.*;
+import java.io.*;
+
+public class Solution {
+  public static void main(String args[]) {
+    Scanner sc = new Scanner(System.in);
+    int n = sc.nextInt();
+    int a[] = new int[n];
+    for(int i=0;i<n;i++){
+      a[i] = sc.nextInt();
+    }
+    int target = sc.nextInt();
+    int ans[] = twoSum(a,target);
+    System.out.println(ans[0]+" "+ans[1]);
+  }
+  public static int[] twoSum(int[] nums, int target) {
+    Map<Integer,Integer>  map = new HashMap<>();
+
+    int n=nums.length;
+    for(int i=0;i<n;i++){
+        if(map.containsKey(target-nums[i])){
+            int value_id = map.get(target-nums[i]);
+            
+            int ans[] = new int[2];
+            ans[0]=value_id;
+            ans[1]=i;
+            return ans;
+            
+        }
+        map.put(nums[i],i);
+    }
+    
+    return new int[]{-1,-1};
+}
+
+}
+
+Test Cases:
+
+Input: 
+13
+5 67 -2 895 2582 682 55 -275 2 -872 25 0 -275
+5
+Output: 
+0 11
+
+Input: 
+9
+6 2 5 7 -52 -27 -72 -722 -87     
+-20
+Output: 
+3 5
+
+Input: 
+9
+7 3 295 92 592 59825 29824 982 595     
+985
+Output:
+1 7
+
+Input: 
+11
+7 23 -482 -825 -69 -82 58 2 592 92 -92     
+25
+Output: 
+1 7
+
+Input: 
+13
+82 9 92 191 492 4951 -51 21954 -5 2935 -24 -2 9     
+80
+Output: 
+0 11
+
+
+2. Sliding Window Maximum
+
+You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
+
+Return the max sliding window.
+
+Example 1:
+Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+Output: [3,3,5,5,6,7]
+Explanation: 
+Window position                Max
+---------------               -----
+[1  3  -1] -3  5  3  6  7       3
+ 1 [3  -1  -3] 5  3  6  7       3
+ 1  3 [-1  -3  5] 3  6  7       5
+ 1  3  -1 [-3  5  3] 6  7       5
+ 1  3  -1  -3 [5  3  6] 7       6
+ 1  3  -1  -3  5 [3  6  7]      7
+
+Example 2:
+Input: nums = [1], k = 1
+Output: [1]
+ 
+
+Constraints:
+
+1 <= nums.length <= 10^5
+-10^4 <= nums[i] <= 10^4
+1 <= k <= nums.length
+
+Solution:
+import java.util.*;
+import java.io.*;
+
+public class Solution {
+  public static void main(String args[]) {
+    Scanner sc = new Scanner(System.in);
+    int n = sc.nextInt();
+    int a[] = new int[n];
+    for(int i=0;i<n;i++){
+      a[i] = sc.nextInt();
+    }
+    int k = sc.nextInt();
+    int ans[] = maxSlidingWindow(a,k);
+    for(int i=0;i<ans.length;i++){
+      System.out.print(ans[i]+" ");
+    }
+  }
+  public static int[] maxSlidingWindow(int[] nums, int k) {
+    int n=nums.length;
+    if(n<k) return new int[0];
+    
+    int ans[] = new int[n-k+1];
+    Deque<Integer> dq = new ArrayDeque<>();
+    
+    for(int i=0;i<k;i++){
+        while(!dq.isEmpty() && nums[ dq.peekLast() ]<= nums[i]){
+            dq.removeLast();
+        }
+        
+        dq.addLast(i);
+    }
+    
+    ans[0] = nums[ dq.peekFirst() ];
+    
+    for(int i=k;i<n;i++){
+        
+        //remove out of window element
+        if(dq.peekFirst()<=i-k){
+            dq.removeFirst();
+        }
+        
+        //include current element
+        //in decreasing order
+        while(!dq.isEmpty() && nums[ dq.peekLast() ]< nums[i]){
+            dq.removeLast();
+        }
+        
+        //add
+        dq.addLast(i);
+        
+        // System.out.println(dq);
+        //  i=k-1
+//             put=0
+        //k=3
+        //i=2
+        ans[i-k+1] = nums[ dq.peekFirst() ];
+        
+        
+    }
+    
+    
+    return ans;
+}
+
+
+}
+
+
+TestCase:
+Input:  
+13
+5 67 -2 895 2582 682 55 -275 2 -872 25 0 -275    
+5
+Output:  
+2582 2582 2582 2582 2582 682 55 25 25 
+
+
+Input:  
+9
+6 2 5 7 -52 -27 -72 -722 -87    
+2
+Output:  
+6 5 7 7 -27 -27 -72 -87 
+
+
+Input:  
+9
+7 3 295 92 592 5925 2984 982 595    
+5
+Output:  
+592 5925 5925 5925 5925
+
+
+Input:  
+11
+7 23 -482 -825 -69 -82 58 2 592 92 -92    
+4
+Output:  
+23 23 -69 58 58 592 592 592 
+
+
+Input:  
+13
+82 9 92 191 492 4951 -51 2154 -5 2935 -24 -2 9    
+7
+Output:  
+4951 4951 4951 4951 4951 4951 2935
+
+
+3. Reverse Linked List
+
+Given the head of a singly linked list, reverse the list, and return the reversed list.
+
+Example 1:
+Input: head = [1,2,3,4,5]
+Output: [5,4,3,2,1]
+
+Example 2:
+Input: head = [1,2]
+Output: [2,1]
+
+Example 3:
+Input: head = []
+Output: []
+ 
+
+Constraints:
+
+The number of nodes in the list is the range [0, 5000].
+-5000 <= Node.val <= 5000
+
+Solution:
+import java.util.*;
+import java.io.*;
+
+public class Solution {
+  public static void main(String args[]) {
+    Scanner sc = new Scanner(System.in);
+    int n = sc.nextInt();
+    ListNode head = new ListNode(-1);
+    ListNode cur = head;
+    for(int i=0;i<n;i++){
+      int val = sc.nextInt();
+      cur.next = new ListNode(val);
+      cur = cur.next;
+    }
+
+    ListNode ans = reverseList(head.next);
+    while(ans!=null){
+      System.out.print(ans.val+" ");
+      ans = ans.next;
+    }
+  }
+  public static class ListNode {
+       int val;
+       ListNode next;
+       ListNode() {}
+       ListNode(int val) { this.val = val; }
+       ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+  }
+   
+  public static ListNode reverseList(ListNode head) {
+        if(head==null || head.next==null)  return head;
+        
+        
+        //5 -> 4 -> 3 -> 2 -> 1
+        ListNode ans = reverseList(head.next);
+        head.next.next=head;
+        //loop avoid
+        head.next=null;
+        
+        return ans;
+    }
+
+
+
+}
+
+TestCase:
+Input:  
+6
+3 2 1 5 6 4
+Output:  
+4 6 5 1 2 3 
+
+Input:  
+9
+3 2 3 1 2 4 5 5 6 
+Output:  
+6 5 5 4 2 1 3 2 3 
+
+Input:  
+10
+9 3 5 4 0 5 5 2 2 0 
+Output:  
+0 2 2 5 5 0 4 5 3 9 
+
+Input:  
+7
+6 2 -2 26 -29 2 5 
+Output:  
+5 2 -29 26 -2 2 6
+
+Input:  
+7
+9 2985 82 92 0 -82 -27
+Output:  
+-27 -82 0 92 82 2985 9
+
+
+4. Copy List with Random Pointer
+
+A linked list of length n is given such that each node contains an additional random pointer, which could point to any node in the list, or null.
+
+Construct a deep copy of the list. The deep copy should consist of exactly n brand new nodes, where each new node has its value set to the value of its corresponding original node. Both the next and random pointer of the new nodes should point to new nodes in the copied list such that the pointers in the original list and copied list represent the same list state. None of the pointers in the new list should point to nodes in the original list.
+
+For example, if there are two nodes X and Y in the original list, where X.random --> Y, then for the corresponding two nodes x and y in the copied list, x.random --> y.
+
+Return the head of the copied linked list.
+
+The linked list is represented in the input/output as a list of n nodes. Each node is represented as a pair of [val, random_index] where:
+
+val: an integer representing Node.val
+random_index: the index of the node (range from 0 to n-1) that the random pointer points to, or null if it does not point to any node.
+Your code will only be given the head of the original linked list.
+
+Input Format:
+1.	Take user input
+2.	Take array value
+3.	Take node index in which random pointer is pointing to. Index -1 means random pointer pointing to null. 
+
+
+Example 1:
+Input: 
+5
+7 13 11 10 1
+-1 0 4 2 0
+Output: 
+7 13 11 10 1 
+-1 7 1 11 7
+
+Example 2:
+Input: 
+2
+1 2
+1 1
+Output: 
+1 2 
+2 2
+
+Example 3:
+Input: 
+3
+3 3 3
+-1 0 -1
+Output: 
+3 3 3 
+-1 3 -1
+
+
+Constraints:
+0 <= n <= 1000
+0 <= Node.val <= 10^4
+Node.random is null or is pointing to some node in the linked list.
+
+Solution:
+import java.util.*;
+import java.io.*;
+
+public class Solution {
+  public static void main(String args[]) {
+    Scanner sc = new Scanner(System.in);
+    int n = sc.nextInt();
+    ListNode head = new ListNode(-1);
+    ListNode cur = head;
+    ListNode save[] = new ListNode[n];
+
+    for(int i=0;i<n;i++){
+      int val = sc.nextInt();
+      cur.next = new ListNode(val);
+      cur = cur.next;
+      save[i] = cur;
+    }
+
+    cur = head.next;
+    for(int i=0;i<n;i++){
+      int val = sc.nextInt();
+
+      if(val!=-1)  cur.random = save[val];
+
+      cur = cur.next;
+
+    }
+
+    
+
+    // ListNode ans = reverseList(head.next);
+
+    ListNode ans = head.next;
+    cur = ans;
+    while(cur!=null){
+      System.out.print(cur.val+" ");
+      cur = cur.next;
+    }
+
+    System.out.println();
+    
+    cur = ans;
+    while(cur!=null){
+      if(cur.random==null)  System.out.print(-1+" ");
+      else  System.out.print(cur.random.val+" ");
+      cur = cur.next;
+    }
+  }
+  public static class ListNode {
+       int val;
+       ListNode next;
+       ListNode random=null;
+       ListNode() {}
+       ListNode(int val) { this.val = val; }
+       ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+  }
+   
+  public static ListNode reverseList(ListNode head) {
+        if(head==null || head.next==null)  return head;
+        
+        
+        //5 -> 4 -> 3 -> 2 -> 1
+        ListNode ans = reverseList(head.next);
+        head.next.next=head;
+        //loop avoid
+        head.next=null;
+        
+        return ans;
+    }
+
+
+
+}
+
+TestCases:
+Input: 
+5
+7 13 11 10 1
+-1 0 4 2 0
+Output: 
+7 13 11 10 1 
+-1 7 1 11 7
+
+Input: 
+4
+7 13 11 10
+2 0 1 -1 
+Output: 
+7 13 11 10 
+11 7 13 -1
+
+Input: 
+6
+35 85 46 8 22 4
+2 0 5 3 -1 0 
+Output: 
+35 85 46 8 22 4 
+46 35 4 8 -1 35 
+
+Input: 
+7
+9 2 2 202 92 0 82
+3 6 5 0 2 -1 4 
+Output: 
+9 2 2 202 92 0 82 
+202 82 0 9 2 -1 92 
+
+Input: 
+5
+3 85 11 202 0
+-1 0 1 0 -1 
+Output: 
+3 85 11 202 0 
+-1 3 85 3 -1
+
+______________________________________________________________________________
+
+ST1
+
+Question 1:
+Generate Parenthesis
+
+Given an integer 'n'. Print all the possible pairs of 'n' balanced parentheses.
+The output strings should be printed in the sorted order considering '(' has higher value than ')'.
+
+Input Format
+
+Single line containing an integral value 'n'.
+
+Constraints
+
+1<=n<=11
+
+Output Format
+
+Print the balanced parentheses strings with every possible solution on new line.
+
+
+Sample Input
+
+
+2
+
+
+Sample Output
+
+
+
+()() 
+(()) 
+
+Solution: 
+
+import java.util.*;
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        generate(n,0,0,"");
+    }
+    public static void generate (int n,int l,int r, String ans){
+        if(r==n){
+            System.out.println(ans);
+            return;
+        }
+        if(r<l){
+            generate(n,l,r+1,ans+")");
+        }
+        if(l<n){
+            generate(n,l+1,r,ans+"(");
+        }
+    }
+}
+------------------------------------------
+
+Question 2:
+
+permutation of string without duplicates
+
+Given a String s , you have to all the possible permutations of s and while generating if there comes any duplicate permutation you have to avoid it .
+
+Input Format
+
+String s in first line of input
+
+Output Format
+
+all possible permutations of string s (without duplicate permutations) in separate lines
+
+Sample Input
+
+abc
+
+Sample Output
+
+abc
+acb
+bac
+bca
+cab
+cba
+
+
+Solution: 
+
+import java.util.Scanner;
+
+public class String_permutation_without_duplicates {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc=new Scanner(System.in);
+		String s=sc.next();
+		permutations(s,"");
+	}
+	public static void permutations(String s, String ans) {
+		if (s.length() == 0) {
+			System.out.println(ans);
+			return;
+		}
+		boolean[] arr=new boolean[26];
+		
+		for (int i = 0; i < s.length(); i++) {
+			
+			char ch = s.charAt(i);
+			if(arr[ch-'a']==false) {
+				arr[ch-'a']=true;
+				String s1 = s.substring(0, i);
+				String s2 = s.substring(i + 1);
+				permutations(s1 + s2, ans + ch);				
+			}
+		}
+
+	}
+
+}
+
+
+---------------------------
+
+Question 3:
+
+Lexicographical count
+
+Take as input N, a number. Write a recursive function which prints counting from 0 to N in lexicographical order. In lexicographical (dictionary) order 10, 100 and 109 will be printed before 11.
+
+Input Format
+
+Enter a number N.
+
+Output Format
+
+Display all the numbers upto N in a lexicographical order
+
+
+Sample Input
+
+
+
+10
+
+
+
+Sample Output
+
+
+
+0 1 10 2 3 4 5 6 7 8 9 
+
+
+Solution: 
+
+import java.util.*;
+public class Main {
+    public static void main(String args[]) {
+        // Your Code Here
+        Scanner sc=new Scanner (System.in);
+        int n=sc.nextInt();
+        Counting(0,n);
+
+    }
+    public static void Counting(int curr, int end) {
+        if (curr > end) {
+            return;
+        }
+
+        System.out.print(curr+" ");
+        int i = 0;
+        if (curr == 0) {
+            i = 1;
+        }
+
+        for (; i <= 9; i++) {
+            Counting(curr * 10 + i, end);
+        }
+
+    }
+}
+---------------------
+Question 4:
+
+Code to string
+Take as input str, a string. Assume that value of a=1, b=2, c=3, d=4, …. z=26. Write a recursive function (return type Arraylist) to print all possible codes for the string. E.g. for “1123” possible codes are aabc, kbc, alc, aaw, kw.
+
+
+Input:
+
+
+
+A positive integer n (1 <= n <= 3000)
+
+
+
+Output:
+
+
+
+An ArrayList containing all possible codes
+
+
+
+Example:
+
+
+
+Input: n = 1125
+
+Output: [aabe, aay, ale, kbe, ky]
+
+
+SOLUTION:
+
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Recursion_Codes_of_string {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc=new Scanner(System.in);
+		String s=sc.next();
+		ArrayList<String> li=new ArrayList<>();
+		outcomes(s,"",li);
+		System.out.println(li);
+	}
+
+	private static void outcomes(String s, String ans, ArrayList<String> li) {
+		// TODO Auto-generated method stub
+		if(s.length()==0) {
+//			System.out.println(ans);
+			li.add(ans);
+			return;
+		}
+		outcomes(s.substring(1), ans+(char)(s.charAt(0)-'1'+'a'),li);
+		if(s.length()>=2&&Integer.parseInt(s.substring(0,2))<=26){
+			outcomes(s.substring(2), ans+(char)(Integer.parseInt(s.substring(0,2))+'a'-1),li);			
+		}
+	}
+
+}
+
